@@ -33,6 +33,8 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 
 	const $ = res.$;
 
+	const twitterCard = $('meta[property="twitter:card"]').attr('content');
+
 	let title =
 		$('meta[property="og:title"]').attr('content') ||
 		$('meta[property="twitter:title"]').attr('content') ||
@@ -54,9 +56,12 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 	image = image ? URL.resolve(url.href, image) : null;
 
 	const playerUrl =
-		$('meta[property="twitter:player"]').attr('content') ||
-		$('meta[name="twitter:player"]').attr('content') ||
-		$('meta[property="og:video"]').attr('content');
+		(twitterCard !== 'summary_large_image' && $('meta[property="twitter:player"]').attr('content')) ||
+		(twitterCard !== 'summary_large_image' && $('meta[name="twitter:player"]').attr('content')) ||
+		$('meta[property="og:video"]').attr('content') ||
+		$('meta[property="og:video:secure_url"]').attr('content') ||
+		$('meta[property="og:video:url"]').attr('content') ||
+		null;
 
 	const playerWidth = parseInt(
 		$('meta[property="twitter:player:width"]').attr('content') ||
