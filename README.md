@@ -11,6 +11,7 @@
 [![][actions-badge]][actions-link]
 [![][himawari-badge]][himasaku]
 [![][sakurako-badge]][himasaku]
+[![][https://img.shields.io/badge/work%20on-my%20machine-orange.svg?style=flat-square]][]
 
 [![NPM](https://nodei.co/npm/@ayuskey/summaly.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/@ayuskey/summaly)
 
