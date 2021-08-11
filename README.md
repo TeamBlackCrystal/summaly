@@ -8,17 +8,17 @@
 
 [![][npm-badge]][npm-link]
 [![][mit-badge]][mit]
-[![][travis-badge]][travis-link]
+<!--[![][travis-badge]][travis-link]-->
 [![][himawari-badge]][himasaku]
 [![][sakurako-badge]][himasaku]
 
-[![NPM](https://nodei.co/npm/summaly.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/summaly)
+[![NPM](https://nodei.co/npm/@ayuskey/summaly.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/@ayuskey/summaly)
 
 Get any web page's summary. [Try it out](https://runkit.com/npm/summaly)
 
 Installation
 ----------------------------------------------------------------
-`$ npm install summaly`
+`$ npm install @ayuskey/summaly`
 
 Usage
 ----------------------------------------------------------------
@@ -69,7 +69,7 @@ A Promise of an Object that contains properties below:
 ### Example
 
 ``` javascript
-import summaly from 'summaly';
+import summaly from '@ayuskey/summaly';
 
 const summary = await summaly('https://www.youtube.com/watch?v=NMIEAhH_fTU');
 
@@ -99,8 +99,8 @@ License
 ----------------------------------------------------------------
 [MIT](LICENSE)
 
-[npm-link]:       https://www.npmjs.com/package/summaly
-[npm-badge]:      https://img.shields.io/npm/v/summaly.svg?style=flat-square
+[npm-link]:       https://www.npmjs.com/package/@ayuskey/summaly
+[npm-badge]:      https://img.shields.io/npm/v/@ayuskey/summaly.svg?style=flat-square
 [mit]:            http://opensource.org/licenses/MIT
 [mit-badge]:      https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
 [travis-link]:    https://travis-ci.org/syuilo/summaly

@@ -1,14 +1,14 @@
 {
   "name": "@ayuskey/summaly",
-  "version": "2.4.1-rei0784.2",
+  "version": "2.4.1-rei0784.3",
   "description": "Get web page's summary",
   "author": "sousuke0422 <sousuke20xx@gmail.com>",
   "contributors": [
     "syuilo <i@syuilo.com>"
   ],
   "license": "MIT",
-  "repository": "https://github.com/syuilo/summaly.git",
-  "bugs": "https://github.com/syuilo/summaly/issues",
+  "repository": "https://github.com/TeamBlackCrystal/summaly.git",
+  "bugs": "https://github.com/TeamBlackCrystal/summaly/issues",
   "main": "./built/index.js",
   "types": "./built/index.d.ts",
   "scripts": {
