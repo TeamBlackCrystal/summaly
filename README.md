@@ -1,4 +1,7 @@
-summaly
+# Ayu-summaly
+
+ fork of <https://github.com/syuilo/summaly>
+
 ================================================================
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/syuilo/summaly.svg)](https://greenkeeper.io/)
