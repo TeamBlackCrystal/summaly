@@ -8,7 +8,7 @@
 
 [![][npm-badge]][npm-link]
 [![][mit-badge]][mit]
-<!--[![][travis-badge]][travis-link]-->
+[![][actions-badge]][actions-link]
 [![][himawari-badge]][himasaku]
 [![][sakurako-badge]][himasaku]
 
@@ -103,8 +103,8 @@ License
 [npm-badge]:      https://img.shields.io/npm/v/@ayuskey/summaly.svg?style=flat-square
 [mit]:            http://opensource.org/licenses/MIT
 [mit-badge]:      https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
-[travis-link]:    https://travis-ci.org/syuilo/summaly
-[travis-badge]:   http://img.shields.io/travis/syuilo/summaly.svg?style=flat-square
+[actions-link]:    https://github.com/TeamBlackCrystal/summaly/actions
+[actions-badge]:   https://img.shields.io/github/workflow/status/TeamBlackCrystal/summaly/Node.js%20CI?style=flat-square
 [himasaku]:       https://himasaku.net
 [himawari-badge]: https://img.shields.io/badge/%E5%8F%A4%E8%B0%B7-%E5%90%91%E6%97%A5%E8%91%B5-1684c5.svg?style=flat-square
 [sakurako-badge]: https://img.shields.io/badge/%E5%A4%A7%E5%AE%A4-%E6%AB%BB%E5%AD%90-efb02a.svg?style=flat-square
