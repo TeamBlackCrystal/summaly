@@ -11,7 +11,7 @@
 [![][actions-badge]][actions-link]
 [![][himawari-badge]][himasaku]
 [![][sakurako-badge]][himasaku]
-[![][https://img.shields.io/badge/work%20on-my%20machine-orange.svg?style=flat-square]][]
+[![][work-badge]][work-badge]
 
 [![NPM](https://nodei.co/npm/@ayuskey/summaly.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/@ayuskey/summaly)
 
@@ -109,3 +109,4 @@ License
 [himasaku]:       https://himasaku.net
 [himawari-badge]: https://img.shields.io/badge/%E5%8F%A4%E8%B0%B7-%E5%90%91%E6%97%A5%E8%91%B5-1684c5.svg?style=flat-square
 [sakurako-badge]: https://img.shields.io/badge/%E5%A4%A7%E5%AE%A4-%E6%AB%BB%E5%AD%90-efb02a.svg?style=flat-square
+[work-badge]:     https://img.shields.io/badge/work%20on-my%20machine-orange.svg?style=flat-square
