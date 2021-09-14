@@ -11,7 +11,7 @@
 [![][sakurako-badge]][himasaku]
 [![][work-badge]][work-badge]
 
-[![NPM](https://nodei.co/npm/@ayuskey/summaly.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/@ayuskey/summaly)
+[![NPM](https://nodeico.herokuapp.com/@ayuskey/summaly.svg)](https://www.npmjs.com/package/@ayuskey/summaly)
 
 Get any web page's summary. [Try it out](https://runkit.com/npm/summaly)
 
