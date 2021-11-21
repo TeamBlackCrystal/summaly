@@ -1,59 +1,55 @@
-import * as URL from 'url';
-import * as request from 'request';
-import nullOrEmpty from './utils/null-or-empty';
-import clip from './utils/clip';
 import cleanupTitle from './utils/cleanup-title';
-
-import { decode as decodeHtml } from 'html-entities';
-
+import { decodeEntities } from './utils/decode-entities';
+import { SummalyEx } from './summary';
 import { createInstance } from './client';
-import Summary from './summary';
 
-export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
+export default async (url: URL, lang: string | null = null): Promise<SummalyEx> => {
 	if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/)) lang = null;
 
 	const client = createInstance();
 
-	client.set('headers', {
+	(client as any).set('headers', {
 		'Accept-Language': lang
 	});
 
-	const res = await client.fetch(url.href);
+	const res = await client.fetch(url.href).catch((e: any) => {
+		throw `${e.statusCode || e.message}`;
+	});
 
-	if (res.error) {
-		throw 'something happened';
-	}
-
-	const contentType: string = res.response.headers['content-type'];
+	const contentType = res.response.headers['content-type'];
 
 	// HTMLじゃなかった場合は中止
-	if (contentType.indexOf('text/html') === -1) {
-		return null;
+	if (!contentType?.includes('text/html')) {
+		throw `not html ${contentType}`;
 	}
 
 	const $ = res.$;
+
+	const landingUrl = new URL($.documentInfo().url);
 
 	const twitterCard = $('meta[property="twitter:card"]').attr('content');
 
 	let title =
 		$('meta[property="og:title"]').attr('content') ||
 		$('meta[property="twitter:title"]').attr('content') ||
-		$('title').text();
+		$('title').text() ||
+		null;
 
-	if (title === undefined || title === null) {
-		return null;
+	if (title == null) {
+		throw 'no title';
 	}
 
-	title = clip(decodeHtml(title), 100);
+	title = decodeEntities(title, 300);
 
 	let image =
 		$('meta[property="og:image"]').attr('content') ||
 		$('meta[property="twitter:image"]').attr('content') ||
 		$('link[rel="image_src"]').attr('href') ||
 		$('link[rel="apple-touch-icon"]').attr('href') ||
-		$('link[rel="apple-touch-icon image_src"]').attr('href');
+		$('link[rel="apple-touch-icon image_src"]').attr('href') ||
+		null;
 
-	image = image ? URL.resolve(url.href, image) : null;
+	image = image ?  new URL(image, landingUrl.href).href : null;
 
 	const playerUrl =
 		(twitterCard !== 'summary_large_image' && $('meta[property="twitter:player"]').attr('content')) ||
@@ -66,21 +62,22 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 	const playerWidth = parseInt(
 		$('meta[property="twitter:player:width"]').attr('content') ||
 		$('meta[name="twitter:player:width"]').attr('content') ||
-		$('meta[property="og:video:width"]').attr('content'));
+		$('meta[property="og:video:width"]').attr('content') ||
+		'');
 
 	const playerHeight = parseInt(
 		$('meta[property="twitter:player:height"]').attr('content') ||
 		$('meta[name="twitter:player:height"]').attr('content') ||
-		$('meta[property="og:video:height"]').attr('content'));
+		$('meta[property="og:video:height"]').attr('content') ||
+		'');
 
 	let description =
 		$('meta[property="og:description"]').attr('content') ||
 		$('meta[property="twitter:description"]').attr('content') ||
-		$('meta[name="description"]').attr('content');
+		$('meta[name="description"]').attr('content') ||
+		null;
 
-	description = description
-		? clip(decodeHtml(description), 300)
-		: null;
+	description = decodeEntities(description, 300);
 
 	if (title === description) {
 		description = null;
@@ -89,48 +86,19 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 	let siteName =
 		$('meta[property="og:site_name"]').attr('content') ||
 		$('meta[name="application-name"]').attr('content') ||
-		url.hostname;
+		landingUrl.hostname ||
+		null;
 
-	siteName = siteName ? decodeHtml(siteName) : null;
+	siteName = decodeEntities(siteName, 300);
 
 	const favicon =
 		$('link[rel="shortcut icon"]').attr('href') ||
 		$('link[rel="icon"]').attr('href') ||
 		'/favicon.ico';
 
-	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true'
+	const icon = favicon ? new URL(favicon, landingUrl.href).href : null;
 
-	const find = (path: string) => new Promise<string>(done => {
-		const target = URL.resolve(url.href, path);
-		request.head(target, (err, res) => {
-			if (err) {
-				done(null);
-			} else if (res.statusCode == 200) {
-				done(target);
-			} else {
-				done(null);
-			}
-		});
-	});
-
-	// 相対的なURL (ex. test) を絶対的 (ex. /test) に変換
-	const toAbsolute = (relativeURLString: string): string => {
-		const relativeURL = URL.parse(relativeURLString);
-		const isAbsolute = relativeURL.slashes || relativeURL.path[0] === '/';
-
-		// 既に絶対的なら、即座に値を返却
-		if (isAbsolute) {
-			return relativeURLString;
-		}
-
-		// スラッシュを付けて返却
-		return '/' + relativeURLString;
-	};
-
-	const icon = await find(favicon) ||
-		// 相対指定を絶対指定に変換し再試行
-		await find(toAbsolute(favicon)) ||
-		null;
+	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true';
 
 	// Clean up the title
 	title = cleanupTitle(title, siteName);
@@ -139,17 +107,21 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 		title = siteName;
 	}
 
-	return {
-		title: title || null,
-		icon: icon || null,
-		description: description || null,
-		thumbnail: image || null,
+	const result = {
+		title,
+		icon,
+		description,
+		thumbnail: image,
 		player: {
-			url: playerUrl || null,
-			width: playerWidth || null,
-			height: playerHeight || null
+			url: playerUrl,
+			width: Number.isNaN(playerWidth) ? null : playerWidth,
+			height: Number.isNaN(playerHeight) ? null : playerHeight
 		},
-		sitename: siteName || null,
+		sitename: siteName,
 		sensitive,
-	};
+		url: landingUrl.href,
+		$,
+	} as SummalyEx;
+
+	return result;
 };

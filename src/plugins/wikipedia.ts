@@ -1,16 +1,16 @@
-import * as URL from 'url';
-import * as request from 'request-promise-native';
+import { fetchApi } from '../utils/fetch-api';
 import * as debug from 'debug';
-import summary from '../summary';
+import { SummalyEx } from '../summary';
 import clip from './../utils/clip';
 
 const log = debug('summaly:plugins:wikipedia');
 
-export function test(url: URL.Url): boolean {
+export function test(url: URL): boolean {
 	return /\.wikipedia\.org$/.test(url.hostname);
 }
 
-export async function summarize(url: URL.Url): Promise<summary> {
+export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
+	const url = new URL(summaly.url);
 	const lang = url.host.split('.')[0];
 	const title = url.pathname.split('/')[2];
 	const endpoint = `https://${lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${title}`;
@@ -19,8 +19,7 @@ export async function summarize(url: URL.Url): Promise<summary> {
 	log(`title is ${title}`);
 	log(`endpoint is ${endpoint}`);
 
-	let body = await request(endpoint);
-	body = JSON.parse(body);
+	const body = await fetchApi(endpoint);
 	log(body);
 
 	if (!('query' in body) || !('pages' in body.query)) {
@@ -39,6 +38,8 @@ export async function summarize(url: URL.Url): Promise<summary> {
 			width: null,
 			height: null
 		},
-		sitename: 'Wikipedia'
+		sitename: 'Wikipedia',
+		url: summaly.url,
+		$: summaly.$,
 	};
 }

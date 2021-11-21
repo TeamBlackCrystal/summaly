@@ -1,4 +1,7 @@
-type Summary = {
+// todo: ファイル名を'summaly'にする
+import CheerioHttpcli = require("cheerio-httpcli");
+
+export type Summaly = {
 	/**
 	 * The description of that web page
 	 */
@@ -33,9 +36,29 @@ type Summary = {
 	 * Possibly sensitive
 	 */
 	sensitive?: boolean;
+
+	/**
+	 * 最終リダイレクト先URL
+	 */
+	url: string;
 };
 
-export default Summary;
+export type SummalyEx = Summaly & {
+	$: CheerioHttpcli.CheerioStaticEx;
+};
+
+export function StripEx(ex: SummalyEx): Summaly {
+	return {
+		description: ex.description,
+		icon: ex.icon,
+		sitename: ex.sitename,
+		thumbnail: ex.thumbnail,
+		player: ex.player,
+		title: ex.title,
+		sensitive: ex.sensitive,
+		url: ex.url,
+	};
+}
 
 export type Player = {
 	/**

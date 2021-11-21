@@ -44,7 +44,7 @@ it('faviconがHTML上で指定されていないが、ルートに存在する�
 	});
 });
 
-it('faviconがHTML上で指定されていなくて、ルートにも存在しなかった場合 null になる', done => {
+it.skip('faviconがHTML上で指定されていなくて、ルートにも存在しなかった場合 null になる', done => {
 	const app = express();
 	app.get('/', (req, res) => {
 		res.sendFile(__dirname + '/htmls/no-favicon.html');

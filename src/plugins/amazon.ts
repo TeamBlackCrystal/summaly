@@ -1,8 +1,7 @@
-import * as URL from 'url';
+import { SummalyEx } from '../summary';
 import { createInstance } from '../client';
-import summary from '../summary';
 
-export function test(url: URL.Url): boolean {
+export function test(url: URL): boolean {
 	return url.hostname === 'www.amazon.com' ||
 	url.hostname === 'www.amazon.co.jp' ||
 	url.hostname === 'www.amazon.ca' ||
@@ -19,11 +18,16 @@ export function test(url: URL.Url): boolean {
 	url.hostname === 'www.amazon.au';
 }
 
-export async function summarize(url: URL.Url): Promise<summary> {
-	const client = createInstance();
+export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
+	const u = new URL(summaly.url);
 
-	const res = await client.fetch(url.href);
-	const $ = res.$;
+	const m = u.pathname.match(/^\/(?:[^/]+\/)?(?:dp|gp\/product)\/(\w+)/);
+	if (m) {
+		u.pathname = `/dp/${m[1]}`;
+		u.search = '';
+	}
+
+	const $ = summaly.$;
 
 	const title = $('#title').text();
 
@@ -45,6 +49,10 @@ export async function summarize(url: URL.Url): Promise<summary> {
 		$('meta[property="twitter:player:height"]').attr('content') ||
 		$('meta[name="twitter:player:height"]').attr('content'));
 
+	const sensitive =
+		$('#adultWarning').length > 0 ||
+		title?.trim()?.endsWith('[アダルト]');	// Kindle
+
 	return {
 		title: title ? title.trim() : null,
 		icon: 'https://www.amazon.com/favicon.ico',
@@ -55,6 +63,9 @@ export async function summarize(url: URL.Url): Promise<summary> {
 			width: playerWidth || null,
 			height: playerHeight || null
 		},
-		sitename: 'Amazon'
+		sitename: 'Amazon',
+		sensitive,
+		url: u.href,
+		$
 	};
 }

@@ -1,9 +1,10 @@
-import * as URL from 'url';
-import Summary from './summary';
+import { SummalyEx } from './summary';
 
 interface IPlugin {
-	test: (url: URL.Url) => boolean;
-	summarize: (url: URL.Url, lang?: string) => Promise<Summary>;
+	test: (url: URL) => boolean;
+	/** @deprecated */
+	summarize: (url: URL, lang?: string) => Promise<SummalyEx>;
+	postProcess: (summaly: SummalyEx) => Promise<SummalyEx>;
 }
 
 export default IPlugin;
