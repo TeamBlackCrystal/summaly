@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "cheerio": "0.22.0",
-    "debug": "4.3.2",
+    "debug": "4.3.3",
     "escape-regexp": "0.0.1",
     "got": "11.5.1",
     "html-entities": "2.3.2",
