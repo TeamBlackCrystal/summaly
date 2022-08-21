@@ -29,7 +29,7 @@
     "cheerio": "0.22.0",
     "debug": "4.3.4",
     "escape-regexp": "0.0.1",
-    "got": "11.8.5",
+    "got": "12.3.1",
     "html-entities": "2.3.3",
     "iconv-lite": "0.6.3",
     "jschardet": "3.0.0",
