@@ -23,7 +23,7 @@
     "@types/node": "18.11.9",
     "express": "4.18.2",
     "mocha": "10.1.0",
-    "typescript": "4.8.4"
+    "typescript": "4.9.4"
   },
   "dependencies": {
     "cheerio": "0.22.0",
